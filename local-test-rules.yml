@@ -4,7 +4,7 @@
   sources:
     - name: watchdog
       watchdog:
-        path: /Users/ben/git/ansible_events
+        path: "{{src_path}}"
         recursive: True
         ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
   rules:
