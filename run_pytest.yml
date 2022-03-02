@@ -5,4 +5,8 @@
     - shell:
         cmd: pytest -v
         chdir: "{{event.root_path}}"
+      register: output
+    - set_fact:
+        cacheable: true
+        output: "{{output.stdout}}"
 ...

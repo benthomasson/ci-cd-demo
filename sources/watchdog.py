@@ -13,7 +13,6 @@ def main(queue, args):
             RegexMatchingEventHandler.__init__(self, **kwargs)
 
         def on_created(self, event):
-            print(event)
             queue.put(
                 dict(
                     change="created",
@@ -24,7 +23,6 @@ def main(queue, args):
             )
 
         def on_deleted(self, event):
-            print(event)
             queue.put(
                 dict(
                     change="deleted",
@@ -35,7 +33,6 @@ def main(queue, args):
             )
 
         def on_modified(self, event):
-            print(event)
             queue.put(
                 dict(
                     change="modified",
@@ -46,7 +43,6 @@ def main(queue, args):
             )
 
         def on_moved(self, event):
-            print(event)
             queue.put(
                 dict(
                     change="moved",

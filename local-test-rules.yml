@@ -12,14 +12,20 @@
       condition: +change
       action:
         debug:
-    - name: run tests
+    - name: run tests 1
       condition: type == "DirModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
-    - name: run tests
+    - name: run tests 2
       condition: type == "FileModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
+          assert_facts: true
+    - name: print output
+      condition: +output
+      action:
+        print_event:
+          glob: output
 ...
