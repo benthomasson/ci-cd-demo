@@ -1,0 +1,25 @@
+---
+- name: Local Test Runner Rules
+  hosts: all
+  sources:
+    - name: watchdog
+      watchdog:
+        path: .
+        recursive: True
+        ignore_regexes: ['.*\.pytest.*']
+  rules:
+    - name: debug messages
+      condition: +change
+      action:
+        debug:
+    - name: run tests
+      condition: type == "DirModifiedEvent"
+      action:
+        run_playbook:
+          name: run_pytest.yml
+    - name: run tests
+      condition: type == "FileModifiedEvent"
+      action:
+        run_playbook:
+          name: run_pytest.yml
+...

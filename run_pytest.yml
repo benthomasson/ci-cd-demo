@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - shell:
+        cmd: pytest -v
+        chdir: "{{event.root_path}}"
+...

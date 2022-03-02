@@ -7,14 +7,8 @@
         conn_str: "{{connection_str}}"
         queue_name: "{{queue_name}}"
   rules:
-    - name: save last event
+    - name: debug messages
       condition: +payload
       action:
-        assert_fact:
-          fact:
-            last_event: "{{event}}"
-    - name: save fact
-      condition: +last_event
-      action:
-        none:
+        debug:
 ...
