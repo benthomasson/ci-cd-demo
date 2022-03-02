@@ -4,9 +4,9 @@
   sources:
     - name: watchdog
       watchdog:
-        path: .
+        path: /Users/ben/git/ansible_events
         recursive: True
-        ignore_regexes: ['.*\.pytest.*']
+        ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
   rules:
     - name: debug messages
       condition: +change
@@ -17,12 +17,13 @@
       action:
         run_playbook:
           name: run_pytest.yml
+          post_events: true
     - name: run tests 2
       condition: type == "FileModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
-          assert_facts: true
+          post_events: true
     - name: print output
       condition: +output
       action:
