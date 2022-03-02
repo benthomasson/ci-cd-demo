@@ -1,3 +1,20 @@
+"""
+azure_service_bus.py
+
+An ansible-events event source module for receiving events from an Azure service bus
+
+Arguments:
+    conn_str: The connection string to connect to the Azure service bus
+    queue_name: The name of the queue to pull messages from
+
+Example:
+
+    - name: azure_service_bus
+      azure_service_bus:
+        conn_str: "{{connection_str}}"
+        queue_name: "{{queue_name}}"
+
+"""
 
 import json
 from azure.servicebus import ServiceBusClient

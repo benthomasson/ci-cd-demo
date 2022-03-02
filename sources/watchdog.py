@@ -1,3 +1,22 @@
+"""
+watchdog.py
+
+An ansible-events event source module for watching file system changes.
+
+Arguments:
+    path: The directory to watch for changes.
+    ignore_regexes: A list of regular expressions to ignore changes
+    recursive: Recursively watch the path if true
+
+Example:
+
+    - name: watchdog
+      watchdog:
+        path: "{{src_path}}"
+        recursive: true
+        ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
+"""
+
 import os
 
 from watchdog.events import RegexMatchingEventHandler
