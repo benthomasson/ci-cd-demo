@@ -1,0 +1,2 @@
+jq --null-input --arg src_path "${PWD}" '{"src_path": $src_path}' > /tmp/post.json
+curl -k -H 'Content-Type: application/json' -d @/tmp/post.json http://localhost:5000/post-commit

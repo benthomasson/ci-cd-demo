@@ -22,12 +22,12 @@ def main(queue, args):
         queue.put(
             dict(
                 payload=request.json,
-                meta=dict(endpoint=endpoint, headers=request.headers),
+                meta=dict(endpoint=endpoint, headers=dict(request.headers)),
             )
         )
         return "Received", 202
 
     http_server = WSGIServer(
-        (args.get("host") or "127.0.0.", args.get("port") or 5000), app
+        (args.get("host") or "127.0.0.1", args.get("port") or 5000), app
     )
     http_server.serve_forever()

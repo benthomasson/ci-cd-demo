@@ -4,9 +4,11 @@
   tasks:
     - shell:
         cmd: pytest -v
-        chdir: "{{event.root_path}}"
-      register: output
+        chdir: "{{src_path}}"
+      register: test_result
+      ignore_errors: yes
     - set_fact:
         cacheable: true
-        output: "{{output.stdout}}"
+        output: "{{test_result.stdout}}"
+        returncode: "{{test_result.rc}}"
 ...
