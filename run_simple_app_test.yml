@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: checkout code
+      git:
+        repo: "{{repository.clone_url}}"
+        dest: /tmp/deploy-simple-app
+        version: "{{after}}"
+        update: true
+        force: true
+    - name: run tests
+      shell:
+        cmd: ./scripts/test.sh
+        chdir: /tmp/deploy-simple-app
+      register: test_result
+      ignore_errors: true
+    - set_fact:
+        cacheable: true
+        output: "{{test_result.stdout}}"
+        error: "{{test_result.stderr}}"
+        returncode: "{{test_result.rc}}"
+...

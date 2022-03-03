@@ -11,4 +11,21 @@
       condition: +payload
       action:
         debug:
+    - name: run tests
+      condition: payload.repository.full_name == "benthomasson/simple-app"
+      action:
+        run_playbook:
+          name: run_simple_app_test.yml
+          post_events: true
+          var_root: payload
+    - name: print output
+      condition: +output
+      action:
+        print_event:
+          var_root: output
+    - name: print error
+      condition: +error
+      action:
+        print_event:
+          var_root: error
 ...

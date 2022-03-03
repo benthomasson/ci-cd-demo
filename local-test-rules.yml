@@ -28,5 +28,5 @@
       condition: +output
       action:
         print_event:
-          glob: output
+          var_root: output
 ...
