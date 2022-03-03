@@ -1,0 +1,15 @@
+#!/bin/bash
+while read oldrev newrev ref
+do
+echo $oldrev $newrev $ref
+curl -k \
+     -H 'Content-Type: application/json' \
+     -d $(jq -c \
+             --null-input \
+             --arg repo "${PWD}" \
+             --arg oldrev "${oldrev}" \
+             --arg newrev "${newrev}" \
+             --arg ref "${ref}" \
+             '{"repo": $repo, "oldrev": $oldrev, "newrev": $newrev, "ref": $ref}') \
+     http://localhost:5001/post-receive
+done
