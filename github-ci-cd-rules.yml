@@ -1,5 +1,5 @@
 ---
-- name: CI/CD Rules
+- name: GitHub Deploy Git Hook Rules
   hosts: all
   sources:
     - name: azure_service_bus
@@ -12,27 +12,23 @@
       action:
         debug:
     - name: extract values
-      condition: payload.repository.full_name == "benthomasson/simple-app"
+      condition: payload.repository.full_name == "{{repo}}"
       action:
         post_event:
           fact:
             repository_name: "{{event.payload.repository.full_name}}"
             repository_url: "{{event.payload.repository.clone_url}}"
             after: "{{event.payload.after}}"
-    - name: run tests
-      condition: repository_name == "benthomasson/simple-app"
+    - name: run tests 1
+      condition: repository_name == "{{repo}}"
       action:
         run_playbook:
-          name: run_simple_app_test.yml
+          name: run_deploy.yml
+          var_root: payload
           post_events: true
     - name: print output
       condition: output is defined
       action:
         print_event:
           var_root: output
-    - name: print error
-      condition: error is defined
-      action:
-        print_event:
-          var_root: error
 ...

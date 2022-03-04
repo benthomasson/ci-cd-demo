@@ -9,7 +9,7 @@
         ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
   rules:
     - name: debug messages
-      condition: +change
+      condition: change is defined
       action:
         debug:
     - name: run tests 1
@@ -25,7 +25,7 @@
           name: run_pytest.yml
           post_events: true
     - name: print output
-      condition: +output
+      condition: output is defined
       action:
         print_event:
           var_root: output

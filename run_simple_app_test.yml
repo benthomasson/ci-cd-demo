@@ -4,9 +4,9 @@
   tasks:
     - name: checkout code
       git:
-        repo: "{{repository.clone_url}}"
+        repo: "{{event.repository_url}}"
         dest: /tmp/deploy-simple-app
-        version: "{{after}}"
+        version: "{{event.after}}"
         update: true
         force: true
     - name: run tests

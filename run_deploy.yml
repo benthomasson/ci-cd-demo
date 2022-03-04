@@ -6,7 +6,7 @@
       git:
         repo: "{{repo}}"
         dest: /tmp/deploy
-        version: "{{ref}}"
+        version: "{{event.ref}}"
         update: true
         force: true
     - name: install code
@@ -24,4 +24,13 @@
       shell:
         cmd: /tmp/deploy/.venv/bin/pytest -v
         chdir: /tmp/deploy
+      register: test_result
+      ignore_errors: yes
+    - set_fact:
+        cacheable: true
+        output: "{{test_result.stdout}}"
+        returncode: "{{test_result.rc}}"
+    - file:
+        path: /tmp/deploy
+        state: absent
 ...
