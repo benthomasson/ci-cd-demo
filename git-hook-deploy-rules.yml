@@ -6,19 +6,15 @@
       webhook:
         port: 5001
   rules:
-    - name: debug messages
-      condition: payload is defined
-      action:
-        debug:
     - name: run tests 1
-      condition: payload.repo == "{{repo}}"
+      condition: fact.payload.repo == "{{repo}}"
       action:
         run_playbook:
           name: run_deploy.yml
           var_root: payload
           post_events: true
     - name: print output
-      condition: output is defined
+      condition: fact.output is defined
       action:
         print_event:
           var_root: output

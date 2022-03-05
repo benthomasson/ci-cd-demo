@@ -7,12 +7,8 @@
         conn_str: "{{connection_str}}"
         queue_name: "{{queue_name}}"
   rules:
-    - name: debug messages
-      condition: payload is defined
-      action:
-        debug:
     - name: extract values
-      condition: payload.repository.full_name == "benthomasson/simple-app"
+      condition: fact.payload.repository.full_name == "benthomasson/simple-app"
       action:
         post_event:
           fact:
@@ -20,18 +16,18 @@
             repository_url: "{{event.payload.repository.clone_url}}"
             after: "{{event.payload.after}}"
     - name: run tests
-      condition: repository_name == "benthomasson/simple-app"
+      condition: fact.repository_name == "benthomasson/simple-app"
       action:
         run_playbook:
           name: run_simple_app_test.yml
           post_events: true
     - name: print output
-      condition: output is defined
+      condition: fact.output is defined
       action:
         print_event:
           var_root: output
     - name: print error
-      condition: error is defined
+      condition: fact.error is defined
       action:
         print_event:
           var_root: error

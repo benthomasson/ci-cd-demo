@@ -4,7 +4,7 @@
   tasks:
     - name: checkout code
       git:
-        repo: "{{repo}}"
+        repo: "{{event.repo}}"
         dest: /tmp/deploy
         version: "{{event.ref}}"
         update: true

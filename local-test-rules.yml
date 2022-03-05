@@ -8,24 +8,20 @@
         recursive: true
         ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
   rules:
-    - name: debug messages
-      condition: change is defined
-      action:
-        debug:
     - name: run tests 1
-      condition: type == "DirModifiedEvent"
+      condition: fact.type == "DirModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
           post_events: true
     - name: run tests 2
-      condition: type == "FileModifiedEvent"
+      condition: fact.type == "FileModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
           post_events: true
     - name: print output
-      condition: output is defined
+      condition: fact.output is defined
       action:
         print_event:
           var_root: output
