@@ -7,10 +7,6 @@
         conn_str: "{{connection_str}}"
         queue_name: "{{queue_name}}"
   rules:
-    - name: debug messages
-      condition: event.payload is defined
-      action:
-        debug:
     - name: extract values
       condition: event.payload.repository.full_name == "{{repo_name}}"
       action:
@@ -24,7 +20,6 @@
       action:
         run_playbook:
           name: run_deploy.yml
-          var_root: payload
           post_events: true
     - name: print output
       condition: event.output is defined
