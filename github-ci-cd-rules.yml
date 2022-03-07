@@ -6,6 +6,10 @@
       azure_service_bus:
         conn_str: "{{connection_str}}"
         queue_name: "{{queue_name}}"
+      filters:
+        - json_filter:
+            include_keys: ['clone_url']
+            exclude_keys: ['*_url', '_links', 'base', 'sender']
   rules:
     - name: extract values
       condition: event.payload.repository.full_name == "{{repo_name}}" and event.payload.after is defined
@@ -26,4 +30,8 @@
       action:
         print_event:
           var_root: output
+    - name: debug
+      condition: event.payload is defined
+      action:
+        debug:
 ...
