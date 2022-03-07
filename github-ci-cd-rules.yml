@@ -8,7 +8,7 @@
         queue_name: "{{queue_name}}"
   rules:
     - name: extract values
-      condition: event.payload.repository.full_name == "{{repo_name}}"
+      condition: event.payload.repository.full_name == "{{repo_name}}" and event.payload.after is defined
       action:
         post_event:
           fact:
