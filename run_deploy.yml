@@ -6,7 +6,7 @@
       git:
         repo: "{{event.repo}}"
         dest: /tmp/deploy
-        version: "{{event.ref}}"
+        version: "{{event.ref | split('/') | last}}"
         update: true
         force: true
     - name: install code
