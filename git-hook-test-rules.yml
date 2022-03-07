@@ -6,14 +6,14 @@
       webhook:
   rules:
     - name: run tests 1
-      condition: fact.payload.src_path == "{{src_path}}"
+      condition: event.payload.src_path == "{{src_path}}"
       action:
         run_playbook:
           name: run_pytest.yml
           var_root: payload
           post_events: true
     - name: print output
-      condition: fact.output is defined
+      condition: event.output is defined
       action:
         print_event:
           var_root: output

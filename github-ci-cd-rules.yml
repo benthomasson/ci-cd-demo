@@ -8,11 +8,11 @@
         queue_name: "{{queue_name}}"
   rules:
     - name: debug messages
-      condition: fact.payload is defined
+      condition: event.payload is defined
       action:
         debug:
     - name: extract values
-      condition: fact.payload.repository.full_name == "{{repo_name}}"
+      condition: event.payload.repository.full_name == "{{repo_name}}"
       action:
         post_event:
           fact:
@@ -20,14 +20,14 @@
             repo: "{{event.payload.repository.clone_url}}"
             ref: "{{event.payload.after}}"
     - name: run tests 1
-      condition: fact.repository_name == "{{repo_name}}"
+      condition: event.repository_name == "{{repo_name}}"
       action:
         run_playbook:
           name: run_deploy.yml
           var_root: payload
           post_events: true
     - name: print output
-      condition: fact.output is defined
+      condition: event.output is defined
       action:
         print_event:
           var_root: output

@@ -9,19 +9,19 @@
         ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
   rules:
     - name: run tests 1
-      condition: fact.type == "DirModifiedEvent"
+      condition: event.type == "DirModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
           post_events: true
     - name: run tests 2
-      condition: fact.type == "FileModifiedEvent"
+      condition: event.type == "FileModifiedEvent"
       action:
         run_playbook:
           name: run_pytest.yml
           post_events: true
     - name: print output
-      condition: fact.output is defined
+      condition: event.output is defined
       action:
         print_event:
           var_root: output
