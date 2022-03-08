@@ -33,4 +33,28 @@
     - file:
         path: /tmp/deploy
         state: absent
+    - name: update PR
+      uri:
+        url: "https://api.github.com/repos/{{event.repository_name}}/issues/{{event.pr}}/comments"
+        user: "{{gh_user}}"
+        password: "{{gh_token}}"
+        method: POST
+        headers:
+          Accept: application/vnd.github.v3+json
+        force_basic_auth: True
+        status_code: [200, 201]
+        body: '{"body": "Passed unit tests"}'
+      when: event.pr is defined and test_result.rc == 0
+    - name: update PR
+      uri:
+        url: "https://api.github.com/repos/{{event.repository_name}}/issues/{{event.pr}}/comments"
+        user: "{{gh_user}}"
+        password: "{{gh_token}}"
+        method: POST
+        headers:
+          Accept: application/vnd.github.v3+json
+        force_basic_auth: True
+        status_code: [200, 201]
+        body: '{"body": "Failed unit tests"}'
+      when: event.pr is defined and test_result.rc != 0
 ...

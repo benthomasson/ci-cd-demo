@@ -1,4 +1,3 @@
----
 - name: GitHub Deploy Git Hook Rules
   hosts: all
   sources:
@@ -9,10 +8,21 @@
       filters:
         - json_filter:
             include_keys: ['clone_url']
-            exclude_keys: ['*_url', '_links', 'base', 'sender']
+            exclude_keys: ['*_url', '_links', 'base', 'sender', 'owner', 'user']
+        - dashes_to_underscores:
   rules:
-    - name: extract values
-      condition: event.payload.repository.full_name == "{{repo_name}}" and event.payload.after is defined
+    - name: Pull Request Open
+      condition: event.meta.headers.X_Github_Event == "pull_request" and event.payload.action == "opened"
+      action:
+        post_event:
+          fact:
+            repository_name: "{{event.payload.repository.full_name}}"
+            repo: "{{event.payload.pull_request.head.repo.clone_url}}"
+            ref: "{{event.payload.pull_request.head.ref}}"
+            pr: "{{event.payload.number}}"
+    - name: Push
+      enabled: False
+      condition: event.payload.repository.full_name == "{{repo_name}}" and event.meta.headers.X_Github_Event == "push"
       action:
         post_event:
           fact:
@@ -31,6 +41,7 @@
         print_event:
           var_root: output
     - name: debug
+      enabled: False
       condition: event.payload is defined
       action:
         debug:
