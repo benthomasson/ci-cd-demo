@@ -21,14 +21,14 @@
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
     - name: Push
-      enabled: False
-      condition: event.payload.repository.full_name == "{{repo_name}}" and event.meta.headers.X_Github_Event == "push"
+      condition: event.meta.headers.X_Github_Event == "pull_request" and event.payload.action == "synchronize"
       action:
         post_event:
           fact:
             repository_name: "{{event.payload.repository.full_name}}"
             repo: "{{event.payload.repository.clone_url}}"
-            ref: "{{event.payload.after}}"
+            ref: "{{event.payload.pull_request.head.ref}}"
+            pr: "{{event.payload.number}}"
     - name: run tests 1
       condition: event.repository_name == "{{repo_name}}"
       action:
@@ -41,7 +41,7 @@
         print_event:
           var_root: output
     - name: debug
-      enabled: False
+      enabled: True
       condition: event.payload is defined
       action:
         debug:
