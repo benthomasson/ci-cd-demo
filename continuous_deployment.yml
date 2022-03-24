@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: checkout code
+      debug:
+        msg: "{{event}}"
+

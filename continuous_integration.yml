@@ -55,7 +55,7 @@
           Accept: application/vnd.github.v3+json
         force_basic_auth: True
         status_code: [200, 201]
-        body: '{"state": "failed"}'
+        body: '{"state": "failure"}'
       when: event.pr is defined and test_result.rc != 0
     - name: merge PR
       uri:
