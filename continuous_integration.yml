@@ -12,6 +12,7 @@
     - name: install code
       pip:
         virtualenv: /tmp/deploy/.venv
+        virtualenv_python: python3.8
         chdir: /tmp/deploy
         editable: true
         name: .
