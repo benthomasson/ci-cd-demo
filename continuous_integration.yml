@@ -33,9 +33,9 @@
     - file:
         path: /tmp/deploy
         state: absent
-    - name: update PR
+    - name: update commit status
       uri:
-        url: "https://api.github.com/repos/{{event.repository_name}}/issues/{{event.pr}}/comments"
+        url: "https://api.github.com/repos/{{event.repository_name}}/statuses/{{event.sha}}"
         user: "{{gh_user}}"
         password: "{{gh_token}}"
         method: POST
@@ -43,11 +43,11 @@
           Accept: application/vnd.github.v3+json
         force_basic_auth: True
         status_code: [200, 201]
-        body: '{"body": "Passed unit tests"}'
+        body: '{"state": "success"}'
       when: event.pr is defined and test_result.rc == 0
-    - name: update PR
+    - name: update commit status
       uri:
-        url: "https://api.github.com/repos/{{event.repository_name}}/issues/{{event.pr}}/comments"
+        url: "https://api.github.com/repos/{{event.repository_name}}/statuses/{{event.sha}}"
         user: "{{gh_user}}"
         password: "{{gh_token}}"
         method: POST
@@ -55,6 +55,18 @@
           Accept: application/vnd.github.v3+json
         force_basic_auth: True
         status_code: [200, 201]
-        body: '{"body": "Failed unit tests"}'
+        body: '{"state": "failed"}'
       when: event.pr is defined and test_result.rc != 0
+    - name: merge PR
+      uri:
+        url: "https://api.github.com/repos/{{event.repository_name}}/pulls/{{event.pr}}/merge"
+        user: "{{gh_user}}"
+        password: "{{gh_token}}"
+        method: PUT
+        headers:
+          Accept: application/vnd.github.v3+json
+        force_basic_auth: True
+        status_code: [200, 201]
+        body: '{"merge_method": "rebase"}'
+      when: event.pr is defined and test_result.rc == 0
 ...

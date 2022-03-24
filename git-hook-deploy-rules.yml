@@ -10,7 +10,7 @@
       condition: event.payload.repo == "{{repo}}"
       action:
         run_playbook:
-          name: run_deploy.yml
+          name: continuous_integration.yml
           var_root: payload
           post_events: true
     - name: print output

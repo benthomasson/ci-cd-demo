@@ -20,7 +20,8 @@
             repo: "{{event.payload.pull_request.head.repo.clone_url}}"
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
-    - name: Push
+            sha: "{{event.payload.pull_request.head.sha}}"
+    - name: Push to PR
       condition: event.meta.headers.X_Github_Event == "pull_request" and event.payload.action == "synchronize"
       action:
         post_event:
@@ -29,17 +30,25 @@
             repo: "{{event.payload.repository.clone_url}}"
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
+            sha: "{{event.payload.after}}"
     - name: run tests 1
-      condition: event.repository_name == "{{repo_name}}"
+      condition: event.repository_name == "{{repo_name}}" and event.pr is defined
       action:
         run_playbook:
-          name: run_deploy.yml
+          name: continuous_integration.yml
           post_events: true
     - name: print output
       condition: event.output is defined
       action:
         print_event:
           var_root: output
+    - name: Merge into main
+      condition: event.meta.headers.X_Github_Event == "push" and event.payload.ref == "refs/heads/main"
+      action:
+        run_playbook:
+          name: continuous_deployment.yml
+          var_root: payload
+          post_events: true
     - name: debug
       enabled: True
       condition: event.payload is defined
