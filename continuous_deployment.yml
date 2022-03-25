@@ -2,9 +2,6 @@
 - hosts: localhost
   gather_facts: False
   tasks:
-    - name: debug
-      debug:
-        msg: "{{event}}"
     - name: checkout code
       git:
         repo: https://github.com/benthomasson/ci-cd-ee

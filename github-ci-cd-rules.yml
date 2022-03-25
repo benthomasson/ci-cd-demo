@@ -41,7 +41,7 @@
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
             sha: "{{event.payload.after}}"
-    - name: run tests 1
+    - name: run tests
       condition: event.repository_name == "{{repo_name}}" and event.pr is defined
       action:
         run_playbook:
@@ -60,7 +60,7 @@
           var_root: payload
           post_events: true
     - name: debug
-      enabled: True
+      enabled: False
       condition: event.payload is defined
       action:
         debug:
