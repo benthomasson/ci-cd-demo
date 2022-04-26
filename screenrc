@@ -1,0 +1,9 @@
+zombie qr
+screen bash
+#chdir /Users/ben/git/ci-cd-demo
+screen ./scripts/run-local-tests.sh
+screen ./scripts/run-local-tests-git-hook.sh
+#chdir /Users/ben/git/eventing-prototype/azure/arms/webhook-forwarder
+#screen ./run_watch_forwarder.sh
+#chdir /Users/ben/git/ci-cd-ee
+#screen ./run-forever.sh
