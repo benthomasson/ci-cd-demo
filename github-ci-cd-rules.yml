@@ -54,6 +54,7 @@
           var_root: output
 
     - name: Merge into main
+      enabled: False
       condition: event.meta.headers.X_Github_Event == "push" and event.payload.ref == "refs/heads/main"
       action:
         run_playbook:

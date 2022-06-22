@@ -31,3 +31,11 @@ def main(queue, args):
         (args.get("host") or "127.0.0.1", args.get("port") or 5000), app
     )
     http_server.serve_forever()
+
+
+if __name__ == "__main__":
+    
+    class MockQueue:
+        def put(self, event):
+            print(event)
+    main(MockQueue(), {})
