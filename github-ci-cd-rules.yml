@@ -37,7 +37,7 @@
         post_event:
           fact:
             repository_name: "{{event.payload.repository.full_name}}"
-            repo: "{{event.payload.repository.clone_url}}"
+            repo: "{{event.payload.pull_request.head.repo.clone_url}}"
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
             sha: "{{event.payload.after}}"
