@@ -41,6 +41,16 @@
             ref: "{{event.payload.pull_request.head.ref}}"
             pr: "{{event.payload.number}}"
             sha: "{{event.payload.after}}"
+    - name: Read for review
+      condition: event.meta.headers.X_Github_Event == "pull_request" and event.payload.action == "ready_for_review"
+      action:
+        post_event:
+          fact:
+            repository_name: "{{event.payload.repository.full_name}}"
+            repo: "{{event.payload.pull_request.head.repo.clone_url}}"
+            ref: "{{event.payload.pull_request.head.ref}}"
+            pr: "{{event.payload.number}}"
+            sha: "{{event.payload.pull_request.head.sha}}"
     - name: run tests
       condition: event.repository_name == "{{repo_name}}" and event.pr is defined
       action:
