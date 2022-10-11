@@ -17,22 +17,22 @@ Example:
         ignore_regexes: ['.*\.pytest.*', '.*__pycache__.*', '.*/.git.*']
 """
 
-import os
+import asyncio
 
 from watchdog.events import RegexMatchingEventHandler
 from watchdog.observers import Observer
 
 
-def main(queue, args):
+def watch(loop, queue, args):
 
-    root_path = os.path.abspath(args["path"])
+    root_path = args["path"]
 
     class Handler(RegexMatchingEventHandler):
         def __init__(self, **kwargs):
             RegexMatchingEventHandler.__init__(self, **kwargs)
 
         def on_created(self, event):
-            queue.put(
+            loop.call_soon_threadsafe(queue.put_nowait,
                 dict(
                     change="created",
                     src_path=event.src_path,
@@ -42,7 +42,7 @@ def main(queue, args):
             )
 
         def on_deleted(self, event):
-            queue.put(
+            loop.call_soon_threadsafe(queue.put_nowait,
                 dict(
                     change="deleted",
                     src_path=event.src_path,
@@ -52,7 +52,7 @@ def main(queue, args):
             )
 
         def on_modified(self, event):
-            queue.put(
+            loop.call_soon_threadsafe(queue.put_nowait,
                 dict(
                     change="modified",
                     src_path=event.src_path,
@@ -62,7 +62,7 @@ def main(queue, args):
             )
 
         def on_moved(self, event):
-            queue.put(
+            loop.call_soon_threadsafe(queue.put_nowait,
                 dict(
                     change="moved",
                     src_path=event.src_path,
@@ -72,7 +72,7 @@ def main(queue, args):
             )
 
     observer = Observer()
-    handler = Handler(ignore_regexes=args.get("ignore_regexes"))
+    handler = Handler(ignore_regexes=args.get("ignore_regexes", []))
     observer.schedule(handler, root_path, recursive=args["recursive"])
     observer.start()
 
@@ -81,3 +81,20 @@ def main(queue, args):
     finally:
         observer.stop()
         observer.join()
+
+
+def main(queue, args):
+    loop = asyncio.get_event_loop()
+
+    futures = [loop.run_in_executor(None, watch, loop, queue, args)]
+
+    loop.run_until_complete(asyncio.gather(*futures))
+
+
+if __name__ == "__main__":
+
+    class MockQueue:
+        def put_nowait(self, event):
+            print(event)
+
+    asyncio.run(main(MockQueue(), {"path": "/tmp", "recursive": True}))
