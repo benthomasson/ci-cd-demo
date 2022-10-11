@@ -18,6 +18,7 @@ Example:
 """
 
 import asyncio
+import concurrent.futures
 
 from watchdog.events import RegexMatchingEventHandler
 from watchdog.observers import Observer
@@ -83,12 +84,11 @@ def watch(loop, queue, args):
         observer.join()
 
 
-def main(queue, args):
+async def main(queue, args):
     loop = asyncio.get_event_loop()
 
-    futures = [loop.run_in_executor(None, watch, loop, queue, args)]
-
-    loop.run_until_complete(asyncio.gather(*futures))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as task_pool:
+        await loop.run_in_executor(task_pool, watch, loop, queue, args)
 
 
 if __name__ == "__main__":
