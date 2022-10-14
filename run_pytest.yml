@@ -3,7 +3,7 @@
   gather_facts: False
   tasks:
     - shell:
-        cmd: pytest -v
+        cmd: pytest -vvv
         chdir: "{{src_path}}"
       register: test_result
       ignore_errors: yes

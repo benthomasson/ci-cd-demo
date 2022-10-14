@@ -3,7 +3,9 @@
   hosts: all
   sources:
     - name: webhook
-      webhook:
+      ansible.eda.webhook:
+        host: localhost
+        port: 5000
   rules:
     - name: run tests 1
       condition: event.payload.src_path == "{{src_path}}"
@@ -17,4 +19,8 @@
       action:
         print_event:
           var_root: output
+    - name: debug
+      condition: event.payload is defined
+      action:
+        debug:
 ...

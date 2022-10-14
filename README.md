@@ -1,4 +1,4 @@
-# A demo of a CI/CD pipline using ansible-events
+# A demo of a CI/CD pipline using ansible-rulebook
 
 
 A local CI/CD pipeline can be run with:

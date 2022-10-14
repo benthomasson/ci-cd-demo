@@ -8,13 +8,13 @@
         dest: /tmp/deploy-ee
         update: true
         force: true
-    - name: set sha for ansible-events
+    - name: set sha for ansible-rulebook
       lineinfile:
         path: "/tmp/deploy-ee/requirements.txt"
-        line: "git+https://github.com/benthomasson/ansible-events.git@{{event.after}}#egg=ansible-events"
+        line: "git+https://github.com/ansible/ansible-rulebook.git@{{event.after}}#egg=ansible-rulebook"
     - name: build with ansible-builder
       shell:
-        cmd: ansible-builder build --tag quay.io/bthomass/events-demo-ci-cd:latest --container-runtime docker
+        cmd: ansible-builder build --tag quay.io/bthomass/rulebook-demo-ci-cd:latest --container-runtime docker
         chdir: /tmp/deploy-ee/
     - name: stop cicd
       shell:

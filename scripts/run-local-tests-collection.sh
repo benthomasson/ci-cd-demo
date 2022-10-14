@@ -1,3 +1,3 @@
 #!/bin/bash  -ex
-source ~/venv/ansible-events/bin/activate
-ansible-events --rules benthomasson.eda.local-test-rules -i inventory.yml --vars local-vars.yml
+source ~/venv/ansible-rulebook/bin/activate
+ansible-rulebook --rulebook benthomasson.eda.local-test-rules -i inventory.yml --vars local-vars.yml
